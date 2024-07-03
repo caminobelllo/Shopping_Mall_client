@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { axiosInstance } from "../api";
 import styled from "styled-components";
 import ItemList from "../components/items/ItemList";
+import { Dialog } from "primereact/dialog";
 
 const Items = () => {
   const [items, setItems] = useState([]);
@@ -49,12 +50,66 @@ const Items = () => {
     onReset();
   };
 
+  // id 값으로 찾기
+  const [itemId, setItemId] = useState(); // 입력받는 itemId 값
+  const [eachItem, setEachItem] = useState(null);
+
+  const handleItemId = (event) => {
+    event.preventDefault();
+    setItemId(event.target.value);
+  };
+  const getEachItem = async (event) => {
+    event.preventDefault();
+    const response = await axiosInstance.get(`/items/${itemId}`);
+    setEachItem(response.data);
+  };
+
   useEffect(() => {
     getItems();
   }, []);
 
   return (
     <Container>
+      <Title>상품 id로 개별 상품 조회하기</Title>
+      <form>
+        <Input type="number" onChange={handleItemId} placeholder="상품 id" />
+        <Button type="submit" onClick={getEachItem}>
+          조회하기
+        </Button>
+      </form>
+      <div>
+        {eachItem && (
+          <DataContainer>
+            <div>
+              <span style={{ marginRight: "8px", fontWeight: "600" }}>
+                상품 ID:{" "}
+              </span>
+              <span>{eachItem.id}</span>
+            </div>
+
+            <div>
+              <span style={{ marginRight: "8px", fontWeight: "600" }}>
+                상품명:{" "}
+              </span>
+              <span>{eachItem.itemName}</span>
+            </div>
+            <div>
+              <span style={{ marginRight: "8px", fontWeight: "600" }}>
+                가격:{" "}
+              </span>
+              <span>{eachItem.itemPrice}</span>
+            </div>
+            <div>
+              <span style={{ marginRight: "8px", fontWeight: "600" }}>
+                수량:{" "}
+              </span>
+              <span>{eachItem.stockQuantity}</span>
+            </div>
+          </DataContainer>
+        )}
+      </div>
+
+      <Title>상품 등록하기</Title>
       <form>
         <Input
           type="text"
@@ -71,11 +126,12 @@ const Items = () => {
           onChange={handleQuantity}
           placeholder="재고 수량"
         ></Input>
-        <AddItem type="submit" onClick={addItem}>
+        <Button type="submit" onClick={addItem}>
           상품 등록하기
-        </AddItem>
+        </Button>
       </form>
 
+      <Title>전체 상품 리스트</Title>
       <TableHeader>
         <span>상품 ID</span>
         <span>상품명</span>
@@ -98,7 +154,8 @@ const Items = () => {
 export default Items;
 
 const Container = styled.div`
-  margin-top: 100px;
+  margin-top: 50px;
+  margin-bottom: 100px;
   font-size: 16px;
   width: 100%;
   display: flex;
@@ -107,7 +164,13 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-const AddItem = styled.button`
+const Title = styled.span`
+  font-size: 18px;
+  font-weight: 600;
+  padding: 48px;
+`;
+
+const Button = styled.button`
   width: 180x;
   height: 52px;
   margin-left: 20px;
@@ -137,4 +200,15 @@ const Input = styled.input`
   height: 48px;
   margin-right: 12px;
   font-size: 16px;
+`;
+
+const DataContainer = styled.div`
+  border: 1px solid gray;
+  background-color: aliceblue;
+  padding: 1rem 2rem;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;

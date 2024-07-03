@@ -57,12 +57,66 @@ const Members = () => {
     onReset();
   };
 
+  // id 값으로 찾기
+  const [memberId, setMemberId] = useState(); // 입력받는 itemId 값
+  const [eachMember, setEachMember] = useState(null);
+
+  const handleMemberId = (event) => {
+    event.preventDefault();
+    setMemberId(event.target.value);
+  };
+  const getEachMember = async (event) => {
+    event.preventDefault();
+    const response = await axiosInstance.get(`/members/${memberId}`);
+    setEachMember(response.data);
+  };
+
   useEffect(() => {
     getMembers();
   }, []);
 
   return (
     <Container>
+      <Title>사용자 id로 정보 조회하기</Title>
+      <form>
+        <Input
+          type="number"
+          onChange={handleMemberId}
+          placeholder="사용자 id"
+        />
+        <Button type="submit" onClick={getEachMember}>
+          조회하기
+        </Button>
+      </form>
+      <div>
+        {eachMember && (
+          <DataContainer>
+            <div>
+              <span style={{ marginRight: "8px", fontWeight: "600" }}>
+                사용자 ID:{" "}
+              </span>
+              <span>{eachMember.id}</span>
+            </div>
+            <div>
+              <span style={{ marginRight: "8px", fontWeight: "600" }}>
+                사용자 이름:{" "}
+              </span>
+              <span>{eachMember.memberName}</span>
+            </div>
+            <div>
+              <span style={{ marginRight: "8px", fontWeight: "600" }}>
+                주소:{" "}
+              </span>
+              <span>
+                {eachMember.address.city}, {eachMember.address.street},{" "}
+                {eachMember.address.zipcode}
+              </span>
+            </div>
+          </DataContainer>
+        )}
+      </div>
+
+      <Title>사용자 등록하기</Title>
       <form>
         <Input
           type="text"
@@ -101,13 +155,20 @@ const Members = () => {
 export default Members;
 
 const Container = styled.div`
-  margin-top: 100px;
+  margin-top: 50px;
+  margin-bottom: 100px;
   font-size: 16px;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+`;
+
+const Title = styled.span`
+  font-size: 18px;
+  font-weight: 600;
+  padding: 48px;
 `;
 
 const TableHeader = styled.div`
@@ -140,4 +201,29 @@ const Input = styled.input`
   height: 48px;
   margin-right: 12px;
   font-size: 16px;
+`;
+
+const Button = styled.button`
+  width: 180x;
+  height: 52px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+
+  :hover {
+    background-color: #646464;
+  }
+`;
+
+const DataContainer = styled.div`
+  border: 1px solid gray;
+  background-color: aliceblue;
+  padding: 1rem 2rem;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;

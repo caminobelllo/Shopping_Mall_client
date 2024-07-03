@@ -47,9 +47,9 @@ const Items = () => {
           header="ID"
           style={{ width: "25%" }}
           headerStyle={{
-            fontSize: "24px",
+            fontSize: "20px",
             fontWeight: "800",
-            padding: "2rem 0 2rem 6.5rem",
+            padding: "1rem 0 1rem 6.5rem",
             backgroundColor: "#f3f3f3",
           }}
         ></Column>
@@ -58,9 +58,9 @@ const Items = () => {
           header="상품명"
           style={{ width: "25%" }}
           headerStyle={{
-            fontSize: "24px",
+            fontSize: "20px",
             fontWeight: "800",
-            padding: "2rem 0 2rem 6.5rem",
+            padding: "1rem 0 1rem 6.5rem",
             backgroundColor: "#f3f3f3",
           }}
         ></Column>
@@ -69,9 +69,9 @@ const Items = () => {
           header="가격"
           style={{ width: "25%" }}
           headerStyle={{
-            fontSize: "24px",
+            fontSize: "20px",
             fontWeight: "800",
-            padding: "2rem 0 2rem 6.5rem",
+            padding: "1rem 0 1rem 6.5rem",
             backgroundColor: "#f3f3f3",
           }}
         ></Column>
@@ -80,9 +80,9 @@ const Items = () => {
           header="수량"
           style={{ width: "25%" }}
           headerStyle={{
-            fontSize: "24px",
+            fontSize: "20px",
             fontWeight: "800",
-            padding: "2rem 0 2rem 6.5rem",
+            padding: "1rem 0 1rem 6.5rem",
             backgroundColor: "#f3f3f3",
           }}
         ></Column>
@@ -95,7 +95,7 @@ export default Items;
 
 const Container = styled.div`
   margin-top: 100px;
-  font-size: 20px;
+  font-size: 16px;
   width: 100%;
   display: flex;
   justify-content: center;

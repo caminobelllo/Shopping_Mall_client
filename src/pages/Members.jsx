@@ -39,9 +39,9 @@ const Members = () => {
           field="id"
           header="사용자 ID"
           headerStyle={{
-            fontSize: "24px",
+            fontSize: "20px",
             fontWeight: "800",
-            padding: "1rem 0 1rem 8rem",
+            padding: "1rem 0 1rem 9rem",
             backgroundColor: "#f3f3f3",
           }}
         ></Column>
@@ -49,9 +49,9 @@ const Members = () => {
           field="memberName"
           header="사용자 이름"
           headerStyle={{
-            fontSize: "24px",
+            fontSize: "20px",
             fontWeight: "800",
-            padding: "1rem 0 1rem 8rem",
+            padding: "1rem 0 1rem 9rem",
             backgroundColor: "#f3f3f3",
           }}
         ></Column>
@@ -59,9 +59,9 @@ const Members = () => {
           field="address.street"
           header="주소"
           headerStyle={{
-            fontSize: "24px",
+            fontSize: "20px",
             fontWeight: "800",
-            padding: "1rem 0 1rem 8rem",
+            padding: "1rem 0 1rem 9rem",
             backgroundColor: "#f3f3f3",
           }}
         ></Column>
@@ -74,7 +74,7 @@ export default Members;
 
 const Container = styled.div`
   margin-top: 100px;
-  font-size: 20px;
+  font-size: 16px;
   width: 100%;
   display: flex;
   justify-content: center;

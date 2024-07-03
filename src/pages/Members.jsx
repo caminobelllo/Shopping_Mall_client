@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../api";
 import styled from "styled-components";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
+import MemberList from "../components/members/MemberList";
 
 const Members = () => {
   const [members, setMembers] = useState([]);
-  const [address, setAddress] = useState("");
 
   const getMembers = async () => {
     const response = await axiosInstance.get("/members");
@@ -20,52 +18,19 @@ const Members = () => {
 
   return (
     <Container>
-      <DataTable
-        value={members}
-        responsibleLayout="scroll"
-        dataKey="id"
-        paginator
-        rows={5}
-        showGridlines
-        stripedRows
-        emptyMessage="-"
-        tableStyle={{
-          width: "65rem",
-          height: "20rem",
-          textAlign: "center",
-        }}
-      >
-        <Column
-          field="id"
-          header="사용자 ID"
-          headerStyle={{
-            fontSize: "20px",
-            fontWeight: "800",
-            padding: "1rem 0 1rem 9rem",
-            backgroundColor: "#f3f3f3",
-          }}
-        ></Column>
-        <Column
-          field="memberName"
-          header="사용자 이름"
-          headerStyle={{
-            fontSize: "20px",
-            fontWeight: "800",
-            padding: "1rem 0 1rem 9rem",
-            backgroundColor: "#f3f3f3",
-          }}
-        ></Column>
-        <Column
-          field="address.street"
-          header="주소"
-          headerStyle={{
-            fontSize: "20px",
-            fontWeight: "800",
-            padding: "1rem 0 1rem 9rem",
-            backgroundColor: "#f3f3f3",
-          }}
-        ></Column>
-      </DataTable>
+      <TableHeader>
+        <span>사용자 ID</span>
+        <span style={{ paddingRight: "120px" }}>사용자 이름</span>
+        <span style={{ paddingRight: "100px" }}>주소</span>
+      </TableHeader>
+      {members.map((item) => (
+        <MemberList
+          key={item.id}
+          id={item.id}
+          name={item.memberName}
+          address={item.address}
+        />
+      ))}
     </Container>
   );
 };
@@ -77,5 +42,19 @@ const Container = styled.div`
   font-size: 16px;
   width: 100%;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+`;
+
+const TableHeader = styled.div`
+  width: 60%;
+  height: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff2f2;
+  font-size: 20px;
+  font-weight: 800;
+  padding: 0 24px;
 `;

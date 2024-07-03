@@ -19,14 +19,6 @@ const Items = () => {
 
   return (
     <Container>
-      {/* {items.map((item) => (
-        <ItemList
-          key={item.id}
-          name={item.itemName}
-          price={item.itemPrice}
-          quantity={item.stockQuantity}
-        />
-      ))} */}
       <DataTable
         value={items}
         responsibleLayout="scroll"

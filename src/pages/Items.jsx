@@ -133,8 +133,6 @@ const TableHeader = styled.div`
   padding: 0 24px;
 `;
 
-const Form = styled.form``;
-
 const Input = styled.input`
   height: 48px;
   margin-right: 12px;

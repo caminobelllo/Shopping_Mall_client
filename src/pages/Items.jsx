@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { axiosInstance } from "../api";
 import styled from "styled-components";
 import ItemList from "../components/items/ItemList";
-import { Dialog } from "primereact/dialog";
 
 const Items = () => {
   const [items, setItems] = useState([]);
@@ -10,6 +9,10 @@ const Items = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState();
   const [quantity, setQuantity] = useState();
+
+  const [editName, setEditName] = useState("");
+  const [editPrice, setEditPrice] = useState();
+  const [editQuantity, setEditQuantity] = useState();
 
   const getItems = async () => {
     const response = await axiosInstance.get("/items");
@@ -32,10 +35,31 @@ const Items = () => {
     setQuantity(event.target.value);
   };
 
+  const handleEditName = (event) => {
+    event.preventDefault();
+    setEditName(event.target.value);
+  };
+
+  const handleEditPrice = (event) => {
+    event.preventDefault();
+    setEditPrice(event.target.value);
+  };
+
+  const handleEditQuantity = (event) => {
+    event.preventDefault();
+    setEditQuantity(event.target.value);
+  };
+
   const onReset = () => {
     setName("");
     setPrice();
     setQuantity();
+  };
+
+  const onEditReset = () => {
+    setEditName("");
+    setEditPrice();
+    setEditQuantity();
   };
 
   const addItem = async (event) => {
@@ -63,6 +87,23 @@ const Items = () => {
     const response = await axiosInstance.get(`/items/${itemId}`);
     setEachItem(response.data);
   };
+  const deleteItem = async (id) => {
+    await axiosInstance.delete(`/items/${id}`);
+    getItems();
+  };
+  const updateItem = async (event) => {
+    event.preventDefault();
+
+    await axiosInstance.patch(`/items/${itemId}`, {
+      itemName: editName,
+      itemPrice: editPrice,
+      stockQuantity: editQuantity,
+    });
+
+    getItems();
+    getEachItem(event);
+    onReset();
+  };
 
   useEffect(() => {
     getItems();
@@ -72,7 +113,12 @@ const Items = () => {
     <Container>
       <Title>상품 id로 개별 상품 조회하기</Title>
       <form>
-        <Input type="number" onChange={handleItemId} placeholder="상품 id" />
+        <Input
+          type="number"
+          value={itemId}
+          onChange={handleItemId}
+          placeholder="상품 id"
+        />
         <Button type="submit" onClick={getEachItem}>
           조회하기
         </Button>
@@ -105,6 +151,32 @@ const Items = () => {
               </span>
               <span>{eachItem.stockQuantity}</span>
             </div>
+            <DeleteButton onClick={() => deleteItem(eachItem.id)}>
+              삭제하기
+            </DeleteButton>
+            <form>
+              <Input
+                type="text"
+                value={editName}
+                onChange={handleEditName}
+                placeholder="상품 이름"
+              />
+              <Input
+                type="number"
+                value={editPrice}
+                onChange={handleEditPrice}
+                placeholder="상품 가격"
+              />
+              <Input
+                type="number"
+                value={editQuantity}
+                onChange={handleEditQuantity}
+                placeholder="재고 수량"
+              />
+              <Button type="submit" onClick={updateItem}>
+                수정하기
+              </Button>
+            </form>
           </DataContainer>
         )}
       </div>
@@ -113,16 +185,19 @@ const Items = () => {
       <form>
         <Input
           type="text"
+          value={name}
           onChange={handleName}
           placeholder="상품 이름"
         ></Input>
         <Input
           type="number"
+          value={price}
           onChange={handlePrice}
           placeholder="상품 가격"
         ></Input>
         <Input
           type="number"
+          value={quantity}
           onChange={handleQuantity}
           placeholder="재고 수량"
         ></Input>
@@ -145,7 +220,11 @@ const Items = () => {
           name={item.itemName}
           price={item.itemPrice}
           quantity={item.stockQuantity}
-        />
+        >
+          <DeleteButton onClick={() => deleteItem(item.id)}>
+            삭제하기
+          </DeleteButton>
+        </ItemList>
       ))}
     </Container>
   );
@@ -154,7 +233,6 @@ const Items = () => {
 export default Items;
 
 const Container = styled.div`
-  margin-top: 50px;
   margin-bottom: 100px;
   font-size: 16px;
   width: 100%;
@@ -171,7 +249,7 @@ const Title = styled.span`
 `;
 
 const Button = styled.button`
-  width: 180x;
+  width: 180px;
   height: 52px;
   margin-left: 20px;
   margin-bottom: 20px;
@@ -184,6 +262,10 @@ const Button = styled.button`
   }
 `;
 
+const DeleteButton = styled(Button)`
+  margin-top: 24px;
+`;
+
 const TableHeader = styled.div`
   width: 60%;
   height: 48px;
@@ -191,7 +273,7 @@ const TableHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   background-color: #fff2f2;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 800;
   padding: 0 24px;
 `;

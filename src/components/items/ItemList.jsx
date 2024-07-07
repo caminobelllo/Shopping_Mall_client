@@ -1,5 +1,4 @@
 import styled from "styled-components";
-
 const ItemList = ({ id, name, price, quantity }) => {
   return (
     <Container>
@@ -30,3 +29,5 @@ const Content = styled.span`
   justify-content: space-between;
   align-items: center;
 `;
+
+const HandleContent = styled.button``;

@@ -56,12 +56,6 @@ const Items = () => {
     setQuantity();
   };
 
-  const onEditReset = () => {
-    setEditName("");
-    setEditPrice();
-    setEditQuantity();
-  };
-
   const addItem = async (event) => {
     event.preventDefault();
 
@@ -87,6 +81,7 @@ const Items = () => {
     const response = await axiosInstance.get(`/items/${itemId}`);
     setEachItem(response.data);
   };
+
   const deleteItem = async (id) => {
     await axiosInstance.delete(`/items/${id}`);
     getItems();

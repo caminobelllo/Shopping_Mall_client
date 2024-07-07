@@ -11,6 +11,11 @@ const Members = () => {
   const [street, setStreet] = useState("");
   const [zipcode, setZipCode] = useState("");
 
+  const [editName, setEditName] = useState("");
+  const [editCity, setEditCity] = useState("");
+  const [editStreet, setEditStreet] = useState("");
+  const [editZipcode, setEditZipCode] = useState("");
+
   const getMembers = async () => {
     const response = await axiosInstance.get("/members");
     console.log(response.data);
@@ -35,6 +40,26 @@ const Members = () => {
     event.preventDefault();
     setZipCode(event.target.value);
   };
+
+  const handleEditName = (event) => {
+    event.preventDefault();
+    setEditName(event.target.value);
+  };
+
+  const handleEditCity = (event) => {
+    event.preventDefault();
+    setEditCity(event.target.value);
+  };
+
+  const handleEditStreet = (event) => {
+    event.preventDefault();
+    setEditStreet(event.target.value);
+  };
+  const handleEditZipCode = (event) => {
+    event.preventDefault();
+    setEditZipCode(event.target.value);
+  };
+
   const onReset = () => {
     setName("");
     setCity("");
@@ -69,6 +94,28 @@ const Members = () => {
     event.preventDefault();
     const response = await axiosInstance.get(`/members/${memberId}`);
     setEachMember(response.data);
+  };
+
+  const deleteMember = async (id) => {
+    await axiosInstance.delete(`/members/${id}`);
+    getMembers();
+  };
+
+  const updateItem = async (event) => {
+    event.preventDefault();
+
+    await axiosInstance.patch(`/members/${memberId}`, {
+      memberName: editName,
+      address: {
+        city: editCity,
+        street: editStreet,
+        zipcode: editZipcode,
+      },
+    });
+
+    getMembers();
+    getEachMember(event);
+    onReset();
   };
 
   useEffect(() => {
@@ -112,6 +159,38 @@ const Members = () => {
                 {eachMember.address.zipcode}
               </span>
             </div>
+            <DeleteButton onClick={() => deleteMember(eachMember.id)}>
+              삭제하기
+            </DeleteButton>
+            <form>
+              <Input
+                type="text"
+                value={editName}
+                onChange={handleEditName}
+                placeholder="사용자 이름"
+              />
+              <Input
+                type="text"
+                value={editCity}
+                onChange={handleEditCity}
+                placeholder="XX시"
+              />
+              <Input
+                type="text"
+                value={editStreet}
+                onChange={handleEditStreet}
+                placeholder="XX길"
+              />
+              <Input
+                type="text"
+                value={editZipcode}
+                onChange={handleEditZipCode}
+                placeholder="XX번길"
+              />
+              <Button type="submit" onClick={updateItem}>
+                수정하기
+              </Button>
+            </form>
           </DataContainer>
         )}
       </div>
@@ -215,6 +294,10 @@ const Button = styled.button`
   :hover {
     background-color: #646464;
   }
+`;
+
+const DeleteButton = styled(Button)`
+  margin-top: 24px;
 `;
 
 const DataContainer = styled.div`
